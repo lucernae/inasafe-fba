@@ -4,8 +4,9 @@ define([
     'jquery',
     'wellknown',
     'js/model/flood.js',
-    'js/model/forecast_event.js'],
-    function (Backbone, L, $, Wellknown, FloodModel, ForecastEvent) {
+    'js/model/forecast_event.js',
+    'js/view/layers/upload/extra-info/flood.js'],
+    function (Backbone, L, $, Wellknown, FloodModel, ForecastEvent, FloodExtraInfo) {
     return Backbone.View.extend({
         el: '#draw-flood-form',
         post_data: {},
@@ -14,11 +15,11 @@ define([
             this.$form = this.$el;
             this.$place_name = $form.find("input[name='place_name']");
             this.$event_notes = $form.find("input[name='event_notes']");
-            this.$return_period = $form.find("input[name='return_period']");
             this.$depth_class = $form.find("input[name='depth_class']");
             this.$acquisition_date = $form.find("input[name='acquisition_date']");
             this.$forecast_date = $form.find("input[name='forecast_date']");
             this.$hazard_type = $form.find("select[name='hazard_type']");
+            this.extra_info = FloodExtraInfo.get_extra_info();
         },
         create_data: function (polygon) {
             const that = this;

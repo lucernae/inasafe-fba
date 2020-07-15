@@ -22,8 +22,7 @@ define([
             // get hazard type list
             const that = this
             hazardTypeCollection.models.forEach(function (model) {
-                console.log(model)
-                that.$input.append(`<option value="${model.get('id')}">${model.get('name')}</option>`)
+                that.$input.append(`<option data-hazard-type="${model.get('name').toLowerCase()}" value="${model.get('id')}">${model.get('name')}</option>`)
             });
 
             // get hazard class list
@@ -55,6 +54,13 @@ define([
                 console.log(data);
             });
         },
+        /**
+         * Event placeholder after hazard type are fetched
+         */
+        onHazardClassFetchDone: function(e){
+
+        },
+
         /** Initiate event listener
          */
         initEventListener: function () {
