@@ -10,7 +10,7 @@ define([
     'leafletAwesomeIcon'
 ], function (Backbone, $, Basemap, Layers, SidePanelView, IntroView, DepthClassCollection, LeafletWMSLegend, leafletAwesomeIcon) {
     return Backbone.View.extend({
-        initBounds: [[-21.961179941367273,93.86358289827513],[16.948660219367564,142.12675002072507]],
+        defaultZoom: 11,
         wmsLegendURI: `${geoserverUrl}?${$.param({
             SERVICE: 'WMS',
             REQUEST: 'GetLegendGraphic',
@@ -18,7 +18,7 @@ define([
             FORMAT: 'image/png',
             WIDTH: 20,
             HEIGHT: 20,
-            LAYER: 'kartoza:exposed_buildings',
+            LAYER: `${layerNamespace}exposed_buildings`,
             LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
         })}`,
         wmsFloodDepthLegendURI: `${geoserverUrl}?${$.param({
@@ -28,7 +28,7 @@ define([
             FORMAT: 'image/png',
             WIDTH: 20,
             HEIGHT: 20,
-            LAYER: 'kartoza:flood_forecast_layer',
+            LAYER: `${layerNamespace}flood_forecast_layer`,
             LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
         })}`,
         wmsExposedRoadsLegendURI: `${geoserverUrl}?${$.param({
@@ -38,7 +38,7 @@ define([
             FORMAT: 'image/png',
             WIDTH: 20,
             HEIGHT: 20,
-            LAYER: 'kartoza:exposed_roads',
+            LAYER: `${layerNamespace}exposed_roads`,
             LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
         })}`,
         markers: [],
@@ -46,7 +46,7 @@ define([
         reportingPointMarkers: [],
         initialize: function () {
             // constructor
-            this.map = L.map('map').setView([51.505, -0.09], 13).fitBounds(this.initBounds);
+            this.map = L.map('map');
             this.basemap = new Basemap(this);
             this.layers = new Layers(this);
             this.layer_control = L.control.layers(
@@ -59,6 +59,8 @@ define([
             this.listenTo(dispatcher, 'map:redraw', this.redraw);
             this.listenTo(dispatcher, 'map:draw-geojson', this.drawGeojsonLayer);
             this.listenTo(dispatcher, 'map:remove-geojson', this.removeGeojsonLayer);
+            this.map.fitWorld();
+            this.fetchBounds();
 
             // dispatcher registration
             dispatcher.on('map:draw-forecast-layer', this.drawForecastLayer, this);
@@ -72,6 +74,20 @@ define([
             dispatcher.on('map:fit-forecast-layer-bounds', this.fitForecastLayerBounds, this);
             dispatcher.on('map:add-marker', this.addMarker, this);
             dispatcher.on('map:remove-all-markers', this.removeAllMarkers, this);
+        },
+        fetchBounds: function(){
+            let that=this;
+            AppRequest.get(
+                `${postgresUrl}rpc/kartoza_fba_global_extent`,
+                null,
+                {
+                    Accept: 'application/vnd.pgrst.object+json'
+                }
+            ).then(function (extent) {
+                // lat lon format
+                that.initBounds = [[extent.y_min, extent.x_min], [extent.y_max, extent.x_max]];
+                that.map.fitBounds(that.initBounds);
+            });
         },
         addOverlayLayer: function(layer, name){
             this.layer_control.addOverlay(layer, name);
@@ -88,7 +104,7 @@ define([
             }
             dispatcher.trigger('map:redraw');
             this.map.fitBounds(this.initBounds);
-            this.map.setZoom(5);
+            this.map.setZoom(this.defaultZoom);
             if(resetView) {
                 dispatcher.trigger('side-panel:open-welcome')
             }
@@ -97,7 +113,7 @@ define([
         showMap: function() {
             $(this.map._container).show();
             this.map._onResize();
-            this.map.setZoom(5);
+            this.map.setZoom(this.defaultZoom);
         },
         hideMap: function () {
             dispatcher.trigger('flood:deselect-forecast');
@@ -282,7 +298,7 @@ define([
             }
             this.redraw();
             that.map.fitBounds(this.initBounds);
-            this.map.setZoom(5);
+            this.map.setZoom(this.defaultZoom);
             dispatcher.trigger('dashboard:reset')
         },
         fitBounds: function (bounds) {
@@ -302,12 +318,12 @@ define([
             this.region_layer = L.tileLayer.wms(
                 geoserverUrl,
                 {
-                    layers: `kartoza:${region}_boundary`,
+                    layers: `${layerNamespace}${region}_boundary`,
                     format: 'image/png',
                     transparent: true,
                     srs: 'EPSG:4326',
                     tiled: true,
-                    cql_filter: `id_code=${region_id}`,
+                    filter: toXmlAndFilter({id_code: region_id})
                 });
             this.region_layer.setZIndex(20);
             this.addOverlayLayer(this.region_layer, 'Administrative Boundary');
@@ -332,15 +348,20 @@ define([
 
             this.exposed_layers = this.depth_class_collection.map(function (depth_class) {
                 let label = `Exposed Buildings in Depth Class: ${depth_class.get('label')}`
+                let filter = {
+                    flood_event_id: forecast_id,
+                    depth_class: depth_class.id
+                }
+                filter[id_key[region]] = region_id
                 let exposed_layer = L.tileLayer.wms(
                     geoserverUrl,
                     {
-                        layers: `kartoza:exposed_buildings`,
+                        layers: `${layerNamespace}exposed_buildings`,
                         format: 'image/png',
                         transparent: true,
                         srs: 'EPSG:4326',
                         tiled: true,
-                        cql_filter: `flood_event_id=${forecast_id} AND ${id_key[region]}=${region_id} AND depth_class=${depth_class.id}`,
+                        filter: toXmlAndFilter(filter)
                     }
                 );
                 exposed_layer.setZIndex(10 + depth_class.id);
@@ -373,15 +394,19 @@ define([
                 return;
             }
 
+            let filter = {
+                flood_event_id: forecast_id
+            }
+            filter[id_key[region]] = region_id
             this.exposed_road_layer = L.tileLayer.wms(
                 geoserverUrl,
                 {
-                    layers: 'kartoza:exposed_roads',
+                    layers: `${layerNamespace}exposed_roads`,
                     format: 'image/png',
                     transparent: true,
                     srs: 'EPSG:4326',
                     tiled: true,
-                    cql_filter: `flood_event_id=${forecast_id} AND ${id_key[region]}=${region_id}`,
+                    filter: toXmlAndFilter(filter),
                 }
             );
             this.exposed_road_layer.setZIndex(3);
@@ -470,7 +495,7 @@ define([
                         SERVICE: 'WFS',
                         VERSION: '1.0.0',
                         REQUEST: 'GetFeature',
-                        TYPENAME: 'kartoza:reporting_point',
+                        TYPENAME: `${layerNamespace}reporting_point`,
                         MAXFEATURES: 50,
                         OUTPUTFORMAT: 'application/json'
                     })}`,
