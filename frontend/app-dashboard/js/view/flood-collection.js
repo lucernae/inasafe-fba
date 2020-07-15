@@ -327,6 +327,11 @@ define([
         selectForecast: function (forecast) {
             let that = this;
             this.selected_forecast = forecast;
+            hazardTypeCollection.models.forEach(function (model) {
+                if (that.selected_forecast.get('hazard_type_id') === model.get('id')){
+                    that.selected_forecast.set('hazard_type', model.get('name'));
+                }
+            });
             dispatcher.trigger('map:draw-forecast-layer', forecast, function () {
                 dispatcher.trigger('side-panel:open-dashboard', function () {
                     that.fetchVillageData(that.selected_forecast.id);

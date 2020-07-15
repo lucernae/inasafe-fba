@@ -3,8 +3,7 @@
  */
 define([
     'backbone',
-    'js/model/hazard_type.js',
-    'js/model/depth_class.js',], function (Backbone, HazardTypeCollection, HazardClassCollection) {
+    'js/model/depth_class.js',], function (Backbone, HazardClassCollection) {
     return Backbone.View.extend({
         classesByType: {},
         initialize: function ($form) {
@@ -22,14 +21,9 @@ define([
         initData: function () {
             // get hazard type list
             const that = this
-            let typeCollection = new HazardTypeCollection()
-            typeCollection.fetch().then(function (data) {
-                data.forEach(function (value) {
-                    that.$input.append(`<option value="${value.id}">${value.name}</option>`)
-                });
-            }).catch(function (data) {
-                console.log('Hazard type request failed');
-                console.log(data);
+            hazardTypeCollection.models.forEach(function (model) {
+                console.log(model)
+                that.$input.append(`<option value="${model.get('id')}">${model.get('name')}</option>`)
             });
 
             // get hazard class list

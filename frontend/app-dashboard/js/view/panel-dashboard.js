@@ -118,8 +118,6 @@ define([
                 }
                 if (!hazard_type) {
                    hazard_type = 'hazard'
-                } else {
-                    hazard_type = hazard_type['name']
                 }
                 $('#main-panel-header').html(`Summary for <b>${hazard_type}</b> ${floodCollectionView.selected_forecast.attributes.notes}`)
             } else {

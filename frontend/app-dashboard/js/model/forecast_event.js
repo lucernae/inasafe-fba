@@ -19,7 +19,7 @@ define([
     const _flood_event_forecast_list_f_url = postgresUrl + 'rpc/flood_event_forecast_list_f';
     const _flood_event_historical_forecast_list_f_url = postgresUrl + 'rpc/flood_event_historical_forecast_list_f';
     // We define which column to take because we don't want to fetch the whole spreadsheet blob.
-    const _select_query_param = 'select=id,flood_map_id,acquisition_date,forecast_date,source,notes,link,trigger_status';
+    const _select_query_param = 'select=id,flood_map_id,acquisition_date,forecast_date,source,notes,link,trigger_status,hazard_type_id';
     const ForecastEvent = Backbone.Model.extend({
             // attribute placeholder
             _url: {
