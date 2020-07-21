@@ -6,16 +6,11 @@ services:
 
   rabbitmq:
     image: library/rabbitmq
-    hostname: rabbitmq
-    environment:
-      - RABBIT_PASSWORD=rabbit_test_password
-      - USER=rabbit_user
-      - RABBITMQ_NODENAME=rabbit
 
   worker:
     build: django
     hostname: worker
-    command: celery worker -A mapserver -l info --beat
+    command: celery worker -A fba -l info --beat
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.prod_docker
       - POSTGRES_DB=${POSTGRES_DB}
@@ -64,7 +59,6 @@ services:
     links:
       - mapserver:mapserver
       - rabbitmq:rabbitmq
-      - worker:worker
 
   # This is normally the main entry point for a production server
   django-web:
@@ -82,5 +76,4 @@ services:
       - django-uwsgi:uwsgi
       - mapserver:mapserver
       - rabbitmq:rabbitmq
-      - worker:worker
     restart: on-failure:5

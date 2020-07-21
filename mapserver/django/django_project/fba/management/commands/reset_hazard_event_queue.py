@@ -3,8 +3,8 @@ __date__ = '11/06/20'
 
 from django.core.management.base import BaseCommand
 from django.db.models import Q
-from mapserver.models.hazard_event import HazardEvent
-from mapserver.models.hazard_event_queue import HazardEventQueue
+from fba.models.hazard_event import HazardEvent
+from fba.models.hazard_event_queue import HazardEventQueue
 
 
 class Command(BaseCommand):

@@ -11,4 +11,3 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'rest_framework_gis',
 )
 
-BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'

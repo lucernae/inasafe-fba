@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from celery import Celery
 from django.conf import settings
 
-app = Celery('mapserver')
+app = Celery('fba')
 
 CELERY_TIMEZONE = settings.TIME_ZONE
 

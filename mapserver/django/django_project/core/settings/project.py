@@ -32,6 +32,7 @@ LANGUAGES = (
 LOCALE_PATHS = (ABS_PATH('locale'),)
 
 INSTALLED_APPS += (
+    'fba',
     'mapserver',
 )
 
@@ -42,4 +43,5 @@ POSTGREST_BASE_URL = os.environ.get('POSTGREST_BASE_URL', None)
 FIXTURES = '/home/web/fixtures'
 
 DATABASE_ROUTERS = ['core.settings.router.CustomRouter']
-ANALYSIS_REPORT_FOLDER = '/home/web/data/analysis_report'
+ANALYSIS_REPORT_FOLDER = os.environ.get(
+    'ANALYSIS_REPORT_FOLDER', '/home/web/data/analysis_report')

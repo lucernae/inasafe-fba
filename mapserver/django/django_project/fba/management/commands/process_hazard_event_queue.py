@@ -1,13 +1,16 @@
 __author__ = 'Irwan Fathurrahman <irwan@kartoza.com>'
 __date__ = '11/06/20'
 
+import logging
 import json
 import os
 from django.conf import settings
 from datetime import datetime
 from django.core.management.base import BaseCommand
-from mapserver.models.hazard_event import HazardEvent
-from mapserver.models.hazard_event_queue import HazardEventQueue
+from fba.models.hazard_event import HazardEvent
+from fba.models.hazard_event_queue import HazardEventQueue
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -16,14 +19,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         queue = HazardEventQueue.objects.order_by('id').first()
 
-        print('found {}'.format(queue))
+        logger.info('found {}'.format(queue))
         if queue and queue.queue_status != 1:
             start_time = datetime.now()
             # run the script
             queue.queue_status = 1
             queue.save()
 
-            print('run {}'.format(queue.id))
+            logger.info('run {}'.format(queue.id))
             HazardEvent.objects.get_or_create(
                 flood_map_id=queue.flood_map_id,
                 acquisition_date=queue.acquisition_date,
@@ -35,7 +38,7 @@ class Command(BaseCommand):
                 progress=queue.progress,
                 hazard_type_id=queue.hazard_type_id
             )
-            print('done {}'.format(queue.id))
+            logger.info('done {}'.format(queue.id))
 
             # save report
             if not os.path.exists(settings.ANALYSIS_REPORT_FOLDER):
@@ -64,4 +67,4 @@ class Command(BaseCommand):
             except Exception:
                 pass
         else:
-            print('skip')
+            logger.info('skip')

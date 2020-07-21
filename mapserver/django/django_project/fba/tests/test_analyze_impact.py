@@ -11,7 +11,8 @@ from django.test import TestCase
 from django.utils.dateparse import parse_datetime
 
 
-class AnalyzeImpact(TestCase):
+class TestAnalyzeImpact(TestCase):
+
     def setUp(self):
         self.forecast_date_range_start = "1990-01-01T17:00:00.000Z"
         self.forecast_date_range_end = "1990-01-30T17:00:00.000Z"
