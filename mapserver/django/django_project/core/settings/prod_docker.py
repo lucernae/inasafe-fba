@@ -22,3 +22,5 @@ DATABASES = {
         'TEST_NAME': 'unittests',
     },
 }
+
+FIXTURES = '/home/web/fixtures'

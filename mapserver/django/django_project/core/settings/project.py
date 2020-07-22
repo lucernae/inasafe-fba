@@ -13,6 +13,9 @@ from .contrib import *  # noqa
 
 # Due to profile page does not available,
 # this will redirect to home page after login
+from .utils import ABS_PATH
+import ast
+
 LOGIN_REDIRECT_URL = '/'
 
 # How many versions to list in each project box
@@ -40,7 +43,9 @@ MAPSERVER_PUBLIC_WMS_URL = os.environ.get('MAPSERVER_PUBLIC_WMS_URL', None)
 MAPSERVER_PUBLIC_OWS_URL = os.environ.get('MAPSERVER_PUBLIC_OWS_URL', None)
 MAPSERVER_PUBLIC_SLD_URL = os.environ.get('MAPSERVER_PUBLIC_SLD_URL', None)
 POSTGREST_BASE_URL = os.environ.get('POSTGREST_BASE_URL', None)
-FIXTURES = '/home/web/fixtures'
+FIXTURES = ABS_PATH('../../fixtures')
+# Specify settings to ignore Python Requests SSL verification
+REQUESTS_SSL_VERIFY = ast.literal_eval(os.environ.get('REQUESTS_SSL_VERIFY', 'False'))
 
 DATABASE_ROUTERS = ['core.settings.router.CustomRouter']
 ANALYSIS_REPORT_FOLDER = os.environ.get(
