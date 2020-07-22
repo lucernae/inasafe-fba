@@ -4,12 +4,16 @@ define([
     'jquery',
     'moment',
     'js/model/flood.js',
-    'js/model/forecast_event.js'
-], function (Backbone, _, $, moment, FloodModel, ForecastEvent) {
+    'js/model/forecast_event.js',
+    'js/view/forms/hazard-type-input.js',
+    'js/view/layers/upload/extra-info/flood.js',
+    'js/view/layers/upload/extra-info/hurricane.js'
+], function (Backbone, _, $, moment, FloodModel, ForecastEvent, HazardTypeInput, FloodExtraInfo, HurricaneExtraInfo) {
     return Backbone.View.extend({
         el: "#upload-flood-form",
         events: {
-            'submit': 'submitForm'
+            'submit': 'submitForm',
+            'change #hazard_type': 'hazardTypeChange'
         },
 
         initialize: function(){
@@ -22,9 +26,21 @@ define([
             this.$flood_model_notes = $form.find("input[name='flood_model_notes']");
             this.$source_url = $form.find("input[name='source_url']");
             this.$geojson = $form.find("input[name='geojson']");
-            this.$return_period = $form.find("select[name='return_period']");
             this.$acquisition_date = $form.find("input[name='acquisition_date']");
             this.$forecast_date = $form.find("input[name='forecast_date']");
+            this.$hazard_type = $form.find("select[name='hazard_type']");
+            this.$extra_info = $form.find("#extra-info");
+            this.hazardInput = new HazardTypeInput($form);
+            this.hazardTypeChange();
+        },
+
+        hazardTypeChange: function(e){
+            // Load extra form
+            let that = this;
+            const hazard_type = this.$hazard_type.find('option:selected').attr('data-hazard-type');
+            $.get(`forms/upload-extra-info/${hazard_type}.html`).then(function (innerHTML) {
+                that.$extra_info.html(innerHTML);
+            });
         },
 
         submitForm: function(e){
@@ -40,27 +56,44 @@ define([
             const flood_model_notes = this.$flood_model_notes.val();
             const source_url = this.$source_url.val();
             const geojson = this.$geojson[0].files;
-            const return_period = this.$return_period.val();
             const acquisition_date = moment.fromAirDateTimePicker(this.$acquisition_date.val()).format();
             const forecast_date = moment.fromAirDateTimePicker(this.$forecast_date.val()).format();
+            const hazard_type = this.$hazard_type.val();
 
-
-            const forecast_event_attr = {
+            let forecast_event_attr = {
                 source: source,
                 link: source_url,
                 notes: event_notes,
                 acquisition_date: acquisition_date,
-                forecast_date: forecast_date
+                forecast_date: forecast_date,
+                hazard_type_id: hazard_type
             };
+
+            const hazard_extra_info = [FloodExtraInfo, HurricaneExtraInfo]
+            const hazard_extra_info_map = hazard_extra_info.map(c => {
+                let instance = new c(that.$el);
+                return [
+                    that.$hazard_type.find(`option[data-hazard-type=${instance.get_hazard_type()}]`).val(),
+                    instance
+                    ];
+            }).reduce((obj, val) => {
+                obj[val[0]] = val[1];
+                return obj;
+            }, {});
+
+            this.extra_info = hazard_extra_info_map[hazard_type]?.get_extra_info() ?? {};
 
             const forecast_event = new ForecastEvent(forecast_event_attr);
             this.forecast_event = forecast_event;
-            
-            FloodModel.uploadFloodMap({
+            let hazard_attr = {
                 files: geojson,
                 place_name: place_name,
-                return_period: return_period,
-                flood_model_notes: flood_model_notes})
+                flood_model_notes: flood_model_notes,
+                hazard_classes: that.hazardInput.returnCurrentClasses()
+            }
+            hazard_attr = { ...hazard_attr, ...this.extra_info }
+
+            FloodModel.uploadFloodMap(hazard_attr)
                 .then(function(flood){
                     that.flood = flood;
 
