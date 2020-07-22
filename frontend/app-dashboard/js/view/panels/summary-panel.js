@@ -111,7 +111,7 @@ define([
 
             let ctxPrimaryExposure = $parentWrapper.find('.summary-chart-primary').get(0).getContext('2d');
             let datasetsPrimaryExposure = {
-                labels: ["Not Flooded", "Flooded"],
+                labels: ["Not Impacted", "Impacted"],
                 datasets: [{
                     data: [primary_exposure_data - primary_exposure_flood_data, primary_exposure_flood_data],
                     backgroundColor: ['#e5e5e5', '#82B7CA']
@@ -122,10 +122,10 @@ define([
                 labels: humanLabel,
                 datasets: [
                     {
-                        label: "Not Flooded",
+                        label: "Not Impacted",
                         data: graph_data
                     }, {
-                        label: "Flooded",
+                        label: "Impacted",
                         data: flood_graph_data,
                         backgroundColor: backgroundColours
                     }]

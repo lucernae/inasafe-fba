@@ -7,4 +7,7 @@ if __name__ == '__main__':
     importer.check_settings()
     importer.create_timestamp()
     importer.check_postgis()
-    importer._first_pbf_import(['-limitto', importer.clip_json_file])
+    if importer.clip_json_file:
+        importer._first_pbf_import(['-limitto', importer.clip_json_file])
+    else:
+        importer._first_pbf_import([])

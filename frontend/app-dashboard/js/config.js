@@ -75,9 +75,18 @@ require([
     'js/view/map.js',
     'js/request.js',
     'js/view/flood-collection.js',
-], function ($, bootstrap, Backbone, _, moment, L, LDraw, AirDatepicker, AirDatepickerEN,  utils, MAP, RequestView, FloodCollectionView) {
+    'js/model/hazard_type.js',
+], function ($, bootstrap, Backbone, _, moment, L, LDraw, AirDatepicker, AirDatepickerEN, utils, MAP, RequestView, FloodCollectionView, HazardTypeCollection) {
     AppRequest = new RequestView();
     dispatcher = _.extend({}, Backbone.Events);
-    mapView = new MAP();
-    floodCollectionView = new FloodCollectionView();
+
+    // we get the hazardTypeCollection
+    hazardTypeCollection = new HazardTypeCollection()
+    hazardTypeCollection.fetch().then(function (data) {
+        mapView = new MAP();
+        floodCollectionView = new FloodCollectionView();
+    }).catch(function (data) {
+        console.log('Hazard type request failed');
+        console.log(data);
+    });
 });
