@@ -168,7 +168,6 @@ define([
                         }
                     });
                 }
-                console.log('test')
                 // We use population data as pivot because it always represents intersected admin boundaries
                 // If guarantees that this is a set of intersected admin boundaries with hazard
                 for(let u=0; u<pivot_data.length; u++){

@@ -7,6 +7,7 @@ repository!
 """
 
 import os  # noqa
+from .celery_setting import *
 from django.utils.translation import ugettext_lazy as _
 from .contrib import *  # noqa
 
@@ -34,12 +35,18 @@ LANGUAGES = (
 LOCALE_PATHS = (ABS_PATH('locale'),)
 
 INSTALLED_APPS += (
+    'fba',
     'mapserver',
 )
 
 MAPSERVER_PUBLIC_WMS_URL = os.environ.get('MAPSERVER_PUBLIC_WMS_URL', None)
 MAPSERVER_PUBLIC_OWS_URL = os.environ.get('MAPSERVER_PUBLIC_OWS_URL', None)
 MAPSERVER_PUBLIC_SLD_URL = os.environ.get('MAPSERVER_PUBLIC_SLD_URL', None)
+POSTGREST_BASE_URL = os.environ.get('POSTGREST_BASE_URL', None)
 FIXTURES = ABS_PATH('../../fixtures')
 # Specify settings to ignore Python Requests SSL verification
 REQUESTS_SSL_VERIFY = ast.literal_eval(os.environ.get('REQUESTS_SSL_VERIFY', 'False'))
+
+DATABASE_ROUTERS = ['core.settings.router.CustomRouter']
+ANALYSIS_REPORT_FOLDER = os.environ.get(
+    'ANALYSIS_REPORT_FOLDER', '/home/web/data/analysis_report')

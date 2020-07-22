@@ -1,0 +1,50 @@
+{
+  "St Andrew": {
+    "flood_event_id": 1,
+    "district_id": 1,
+    "name": "St Andrew",
+    "population_count": 25524,
+    "flooded_population_count": 4987,
+    "trigger_status": null
+  },
+  "St David": {
+    "flood_event_id": 1,
+    "district_id": 2,
+    "name": "St David",
+    "population_count": 14836,
+    "flooded_population_count": 886,
+    "trigger_status": null
+  },
+  "St George": {
+    "flood_event_id": 1,
+    "district_id": 3,
+    "name": "St George",
+    "population_count": 32654,
+    "flooded_population_count": 834,
+    "trigger_status": null
+  },
+  "St Patrick": {
+    "flood_event_id": 1,
+    "district_id": 6,
+    "name": "St Patrick",
+    "population_count": 10157,
+    "flooded_population_count": 799,
+    "trigger_status": null
+  },
+  "St John": {
+    "flood_event_id": 1,
+    "district_id": 5,
+    "name": "St John",
+    "population_count": 6936,
+    "flooded_population_count": 210,
+    "trigger_status": null
+  },
+  "St Mark": {
+    "flood_event_id": 1,
+    "district_id": 4,
+    "name": "St Mark",
+    "population_count": 3879,
+    "flooded_population_count": 110,
+    "trigger_status": null
+  }
+}

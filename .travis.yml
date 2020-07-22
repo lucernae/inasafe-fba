@@ -95,7 +95,7 @@ script:
   - pushd deployment
   - make backend-import-fixtures TARGET=tests/backend/data/${REGION}/sql/hazard_map.sql
   - make backend-import-fixtures TARGET=tests/backend/data/${REGION}/sql/world_pop.sql
-  - make backend-import-fixtures TARGET=tests/backend/data/${REGION}/sql/hazard_event_queue.sql
+  - make backend-import-fixtures TARGET=tests/backend/data/${REGION}/sql/multiple_hazard_event_queue.sql
   - make backend-import-fixtures TARGET=tests/backend/data/sql/process_hazard_event_queue.sql
   - make backend-import-fixtures TARGET=tests/backend/data/sql/calculate_impact.sql
   - popd

@@ -24,6 +24,12 @@ shell:
 wait-mapserver-ready:
 	@docker-compose exec mapserver bash -c 'until wget -qO- localhost:80 &> /dev/null; do echo "Mapserver not ready. Waiting."; sleep 10; done; echo "Mapserver ready"'
 
+worker-up:
+	@docker-compose up -d worker
+
+worker-restart:
+	@docker-compose restart worker
+
 django-shell:
 	@docker-compose exec django-uwsgi bash
 
@@ -38,3 +44,6 @@ django-collectstatic:
 
 django-create-superuser:
 	@docker-compose exec django-uwsgi python manage.py createsuperuser
+
+analyze-impact-test:
+	@docker-compose exec worker python manage.py test mapserver.tests.analyze_impact --settings=core.settings.test_mapserver --keepdb

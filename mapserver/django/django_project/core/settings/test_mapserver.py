@@ -1,6 +1,11 @@
-# -*- coding: utf-8 -*-
-"""Settings for when running under docker in development mode."""
-from .dev import *  # noqa
+"""Configuration for production server"""
+# noinspection PyUnresolvedReferences
+from .prod import *  # noqa
+import os
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {

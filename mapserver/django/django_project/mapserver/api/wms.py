@@ -17,10 +17,13 @@ def get_sld_style(layer_name):
     :return:
     """
     fixture_file = os.path.join(settings.FIXTURES, 'data', 'layer_style.json')
-    with open(fixture_file, 'r') as _file:
-        sld = json.load(_file).get(layer_name, None)
-        if sld:
-            return os.path.join(settings.MAPSERVER_PUBLIC_SLD_URL, sld)
+    try:
+        with open(fixture_file, 'r') as _file:
+            sld = json.load(_file).get(layer_name, None)
+            if sld:
+                return os.path.join(settings.MAPSERVER_PUBLIC_SLD_URL, sld)
+    except IOError:
+        pass
     return None
 
 
