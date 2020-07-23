@@ -11,36 +11,42 @@ define([
 ], function (Backbone, $, Basemap, Layers, SidePanelView, IntroView, DepthClassCollection, LeafletWMSLegend, leafletAwesomeIcon) {
     return Backbone.View.extend({
         defaultZoom: 11,
-        wmsLegendURI: `${geoserverUrl}?${$.param({
-            SERVICE: 'WMS',
-            REQUEST: 'GetLegendGraphic',
-            VERSION: '1.0.0',
-            FORMAT: 'image/png',
-            WIDTH: 20,
-            HEIGHT: 20,
-            LAYER: `${layerNamespace}exposed_buildings`,
-            LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
-        })}`,
-        wmsFloodDepthLegendURI: `${geoserverUrl}?${$.param({
-            SERVICE: 'WMS',
-            REQUEST: 'GetLegendGraphic',
-            VERSION: '1.0.0',
-            FORMAT: 'image/png',
-            WIDTH: 20,
-            HEIGHT: 20,
-            LAYER: `${layerNamespace}flood_forecast_layer`,
-            LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
-        })}`,
-        wmsExposedRoadsLegendURI: `${geoserverUrl}?${$.param({
-            SERVICE: 'WMS',
-            REQUEST: 'GetLegendGraphic',
-            VERSION: '1.0.0',
-            FORMAT: 'image/png',
-            WIDTH: 20,
-            HEIGHT: 20,
-            LAYER: `${layerNamespace}exposed_roads`,
-            LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
-        })}`,
+        wmsExposedBuildingsLegendURI: function (hazard_type) {
+            return `${geoserverUrl}?${$.param({
+                SERVICE: 'WMS',
+                REQUEST: 'GetLegendGraphic',
+                VERSION: '1.0.0',
+                FORMAT: 'image/png',
+                WIDTH: 20,
+                HEIGHT: 20,
+                LAYER: `${layerNamespace}${hazard_type}_exposed_buildings`,
+                LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
+            })}`
+        },
+        wmsFloodDepthLegendURI: function (hazard_type) {
+            return `${geoserverUrl}?${$.param({
+                SERVICE: 'WMS',
+                REQUEST: 'GetLegendGraphic',
+                VERSION: '1.0.0',
+                FORMAT: 'image/png',
+                WIDTH: 20,
+                HEIGHT: 20,
+                LAYER: `${layerNamespace}${hazard_type}_forecast_layer`,
+                LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
+            })}`
+        },
+        wmsExposedRoadsLegendURI: function (hazard_type) {
+            return `${geoserverUrl}?${$.param({
+                SERVICE: 'WMS',
+                REQUEST: 'GetLegendGraphic',
+                VERSION: '1.0.0',
+                FORMAT: 'image/png',
+                WIDTH: 20,
+                HEIGHT: 20,
+                LAYER: `${layerNamespace}${hazard_type}_exposed_roads`,
+                LEGEND_OPTIONS: 'fontName:Ubuntu;fontSize:12;fontAntiAliasing:true;forceLabels:on'
+            })}`
+        },
         markers: [],
         exposed_road_layer: null,
         reportingPointMarkers: [],
@@ -137,10 +143,10 @@ define([
                     // register layer to view
                     that.forecast_layer = forecast_layer;
                     // reset region boundary and exposed flood maps because we are seeing different flood
-                    that.showExposedRoads(null, null, null);
+                    that.showExposedRoads(null, null,null, null);
                     that.showRegionBoundary(null, null);
-                    that.showExposedBuildings(null, null, null);
-                    that.wmsFloodLegend = L.wmsLegend(that.wmsFloodDepthLegendURI, that.map, 'wms-legend-icon fa fa-map-signs', 'bottomleft');
+                    that.showExposedBuildings(null, null, null, null);
+                    that.wmsFloodLegend = L.wmsLegend(that.wmsFloodDepthLegendURI(forecast.hazardTypeSlug()), that.map, 'wms-legend-icon fa fa-map-signs', 'bottomleft');
                     that.addLegendControl();
                     if(callback) {
                         callback();
@@ -159,8 +165,8 @@ define([
             if(this.generalLegendControl){
                 this.map.removeControl(this.generalLegendControl)
             }
-            if(this.wmsLegend) {
-                this.map.removeControl(this.wmsLegend)
+            if(this.wmsExposedBuildingsLegend) {
+                this.map.removeControl(this.wmsExposedBuildingsLegend)
             }
             if(this.wmsFloodLegend){
                 this.map.removeControl(this.wmsFloodLegend)
@@ -328,11 +334,9 @@ define([
             this.region_layer.setZIndex(20);
             this.addOverlayLayer(this.region_layer, 'Administrative Boundary');
         },
-        showExposedBuildings: function (forecast_id, region, region_id) {
-            const that = this;
-            if(this.exposed_layers){
-                this.exposed_layers.forEach(l => that.removeOverlayLayer(l.layer));
-                this.exposed_layers = null;
+        showExposedBuildings: function (forecast_id, hazard_type, region, region_id) {
+            if(this.exposed_buildings_layer){
+                this.removeOverlayLayer(this.exposed_buildings_layer);
             }
             dispatcher.trigger('map:redraw');
 
@@ -342,44 +346,38 @@ define([
                 'village': 'village_id',
             }
 
+            if(region_id === 'main'){
+                return;
+            }
+
             if(region == null && region_id == null){
                 return;
             }
 
-            this.exposed_layers = this.depth_class_collection.map(function (depth_class) {
-                let label = `Exposed Buildings in Depth Class: ${depth_class.get('label')}`
-                let filter = {
-                    flood_event_id: forecast_id,
-                    depth_class: depth_class.id
+            let label = `Exposed Buildings`
+            let filter = {
+                flood_event_id: forecast_id
+            }
+            filter[id_key[region]] = region_id
+            this.exposed_buildings_layer = L.tileLayer.wms(
+                geoserverUrl,
+                {
+                    layers: `${layerNamespace}${hazard_type}_exposed_buildings`,
+                    format: 'image/png',
+                    transparent: true,
+                    srs: 'EPSG:4326',
+                    tiled: true,
+                    filter: toXmlAndFilter(filter)
                 }
-                filter[id_key[region]] = region_id
-                let exposed_layer = L.tileLayer.wms(
-                    geoserverUrl,
-                    {
-                        layers: `${layerNamespace}exposed_buildings`,
-                        format: 'image/png',
-                        transparent: true,
-                        srs: 'EPSG:4326',
-                        tiled: true,
-                        filter: toXmlAndFilter(filter)
-                    }
-                );
-                exposed_layer.setZIndex(10 + depth_class.id);
-                return {
-                    layer: exposed_layer,
-                    name: label
-                }
-            });
-            this.exposed_layers.forEach(l => that.addOverlayLayer(l.layer, l.name));
-            this.wmsExposedRoadsLegend = L.wmsLegend(this.wmsExposedRoadsLegendURI, this.map, 'wms-legend-icon fa fa-road', 'bottomright');
-            this.wmsLegend = L.wmsLegend(this.wmsLegendURI, this.map, 'wms-legend-icon fa fa-binoculars', 'bottomleft');
-            this.wmsFloodLegend = L.wmsLegend(this.wmsFloodDepthLegendURI, this.map, 'wms-legend-icon fa fa-map-signs', 'bottomleft');
+            );
+            this.exposed_buildings_layer.setZIndex(10);
+            this.addOverlayLayer(this.exposed_buildings_layer, label);
+            this.wmsExposedBuildingsLegend = L.wmsLegend(this.wmsExposedBuildingsLegendURI(hazard_type), this.map, 'wms-legend-icon fa fa-binoculars', 'bottomleft');
             this.addLegendControl();
         },
-        showExposedRoads: function (forecast_id, region, region_id) {
-            let that = this;
+        showExposedRoads: function (forecast_id, hazard_type, region, region_id) {
             if(this.exposed_road_layer){
-                that.removeOverlayLayer(that.exposed_road_layer)
+                this.removeOverlayLayer(this.exposed_road_layer);
             }
 
             dispatcher.trigger('map:redraw');
@@ -389,6 +387,10 @@ define([
                 'sub_district': 'sub_district_id',
                 'village': 'village_id',
             };
+
+            if(region_id === 'main'){
+                return;
+            }
 
             if(region == null && region_id == null){
                 return;
@@ -401,7 +403,7 @@ define([
             this.exposed_road_layer = L.tileLayer.wms(
                 geoserverUrl,
                 {
-                    layers: `${layerNamespace}exposed_roads`,
+                    layers: `${layerNamespace}${hazard_type}_exposed_roads`,
                     format: 'image/png',
                     transparent: true,
                     srs: 'EPSG:4326',
@@ -410,7 +412,9 @@ define([
                 }
             );
             this.exposed_road_layer.setZIndex(3);
-            that.addOverlayLayer(this.exposed_road_layer, 'Exposed roads')
+            this.addOverlayLayer(this.exposed_road_layer, 'Exposed roads');
+            this.wmsExposedRoadsLegend = L.wmsLegend(this.wmsExposedRoadsLegendURI(hazard_type), this.map, 'wms-legend-icon fa fa-road', 'bottomright');
+            this.addLegendControl();
         },
         addMarker: function (centroid, trigger_status) {
             if(centroid) {
@@ -451,6 +455,7 @@ define([
                     var el = L.DomUtil.create('div', 'leaflet-bar leaflet-control-wms-legend general-legend-control legend-active');
                     el.innerHTML = '<i class="fa fa-map wms-legend-icon"></i>';
                     L.DomEvent.on(el, 'click', this._click, this);
+                    el.click();
                     return el;
                 },
                 _click: function (e) {
@@ -459,8 +464,8 @@ define([
                     let $container = $('.general-legend-control');
                     if($container.hasClass('legend-active')){
                         $container.removeClass('legend-active');
-                        if(that.wmsLegend) {
-                            that.map.removeControl(that.wmsLegend)
+                        if(that.wmsExposedBuildingsLegend) {
+                            that.map.removeControl(that.wmsExposedBuildingsLegend)
                         }
                         if(that.wmsFloodLegend){
                             that.map.removeControl(that.wmsFloodLegend)
@@ -470,8 +475,8 @@ define([
                         }
                     }else {
                         $container.addClass('legend-active');
-                        if(that.wmsLegend) {
-                            that.map.addControl(that.wmsLegend)
+                        if(that.wmsExposedBuildingsLegend) {
+                            that.map.addControl(that.wmsExposedBuildingsLegend)
                         }
                         if(that.wmsFloodLegend){
                             that.map.addControl(that.wmsFloodLegend)
@@ -483,7 +488,7 @@ define([
                 }
             });
 
-            this.generalLegendControl = new L.Control.CustomLegendButton;
+            this.generalLegendControl = new L.Control.CustomLegendButton();
             this.generalLegendControl.options.position = 'topleft';
             this.map.addControl(this.generalLegendControl);
 

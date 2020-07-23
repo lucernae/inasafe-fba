@@ -1,8 +1,8 @@
 
     LAYER
-		NAME "exposed_buildings"
+		NAME "hurricane_exposed_buildings"
 		METADATA
-			"ows_title" "exposed_buildings"
+			"ows_title" "hurricane_exposed_buildings"
 		END
 		STATUS ON
 		TYPE POLYGON
@@ -21,8 +21,8 @@
 		END
 
 		CLASS
-			NAME "Vulnerability: Low - hazard level >= 2"
-			EXPRESSION (([depth_class] >= 6) AND ([total_vulnerability] <= 0.3))
+			NAME "Vulnerability: Low - hazard level >= H3 (major)"
+			EXPRESSION (([depth_class] <= 82 AND [depth_class] > 43) AND ([total_vulnerability] <= 0.3))
 			STYLE
 				OPACITY 100.0
 				COLOR "#cbfbc5"
@@ -32,8 +32,8 @@
 		END
 
 		CLASS
-			NAME "Vulnerability: Low - hazard level  < 2"
-			EXPRESSION (([depth_class] < 6) AND ([total_vulnerability] <= 0.3))
+			NAME "Vulnerability: Low - hazard level  < H3 (major)"
+			EXPRESSION (([depth_class] <= 43 AND [depth_class] > 4) AND ([total_vulnerability] <= 0.3))
 			STYLE
 				OPACITY 100.0
 				COLOR "#cbfbc5"
@@ -43,8 +43,8 @@
 		END
 
 		CLASS
-			NAME "Vulnerability: Medium - hazard level >= 2"
-			EXPRESSION ((([depth_class] >= 6) AND ([total_vulnerability] > 0.3)) AND ([total_vulnerability] <= 0.6))
+			NAME "Vulnerability: Medium - hazard level >= H3 (major)"
+			EXPRESSION ((([depth_class] <= 82 AND [depth_class] > 43) AND ([total_vulnerability] > 0.3)) AND ([total_vulnerability] <= 0.6))
 			STYLE
 				OPACITY 100.0
 				COLOR "#eb8683"
@@ -54,8 +54,8 @@
 		END
 
 		CLASS
-			NAME "Vulnerability: Medium - hazard level  < 2"
-			EXPRESSION ((([depth_class] < 6) AND ([total_vulnerability] > 0.3)) AND ([total_vulnerability] <= 0.6))
+			NAME "Vulnerability: Medium - hazard level  < H3 (major)"
+			EXPRESSION ((([depth_class] <= 43 AND [depth_class] > 4) AND ([total_vulnerability] > 0.3)) AND ([total_vulnerability] <= 0.6))
 			STYLE
 				OPACITY 100.0
 				COLOR "#eb8683"
@@ -65,8 +65,8 @@
 		END
 
 		CLASS
-			NAME "Vulnerability: High - hazard level >= 2"
-			EXPRESSION (([depth_class] >= 6) AND ([total_vulnerability] > 0.6))
+			NAME "Vulnerability: High - hazard level >= H3 (major)"
+			EXPRESSION (([depth_class] <= 82 AND [depth_class] > 43) AND ([total_vulnerability] > 0.6))
 			STYLE
 				OPACITY 100.0
 				COLOR "#e53123"
@@ -76,8 +76,8 @@
 		END
 
 		CLASS
-			NAME "Vulnerability: High - Hazard level  < 2"
-			EXPRESSION (([depth_class] < 6) AND ([total_vulnerability] > 0.6))
+			NAME "Vulnerability: High - Hazard level  <  H3 (major)"
+			EXPRESSION (([depth_class] <= 43 AND [depth_class] > 4) AND ([total_vulnerability] > 0.6))
 			STYLE
 				OPACITY 100.0
 				COLOR "#e53123"
