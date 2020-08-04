@@ -1,2 +1,4 @@
 .cache
 .postgres-data
+.backup
+docker-osm-settings/custom_settings
