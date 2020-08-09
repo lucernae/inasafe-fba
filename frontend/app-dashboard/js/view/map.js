@@ -137,7 +137,7 @@ define([
                         that.removeOverlayLayer(that.forecast_layer);
                     }
                     that.redraw();
-                    that.addOverlayLayer(forecast_layer, 'Flood Forecast');
+                    that.addOverlayLayer(forecast_layer, 'Hazard Forecast');
                     // zoom to bbox
                     that.map.flyToBounds(extent.leaflet_bounds);
                     // register layer to view
