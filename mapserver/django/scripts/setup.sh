@@ -23,8 +23,10 @@ sudo apt-get update -y; sudo apt-get install rabbitmq-server -y --fix-missing
 sudo service rabbitmq-server start
 
 rabbitmqctl add_user inasafe $RABBITMQ_PASSWORD
+rabbitmqctl add_vhost inasafe
+rabbitmqctl set_permissions -p inasafe inasafe ".*" ".*" ".*"
 
 
 # Install celeryd
-
+groupadd celery
 useradd -M celery -g celery -s `which nologin`

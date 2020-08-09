@@ -20,4 +20,5 @@ CELERY_TIMEZONE = 'UTC'
 
 #BROKER_URL = 'memory://localhost'
 BROKER_URL = 'amqp://guest:guest@rabbitmq'
+CELERY_RESULT_BACKEND = 'rpc://'
 
