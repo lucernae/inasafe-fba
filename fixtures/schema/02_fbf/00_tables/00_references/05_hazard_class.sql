@@ -36,3 +36,8 @@ ALTER SEQUENCE public.depth_class_id_seq OWNED BY public.hazard_class.id;
 --
 
 ALTER TABLE ONLY public.hazard_class ALTER COLUMN id SET DEFAULT nextval('public.depth_class_id_seq'::regclass);
+
+ALTER TABLE hazard_class ADD COLUMN IF NOT EXISTS hazard_type INTEGER;
+ALTER TABLE hazard_class DROP CONSTRAINT IF EXISTS  hazard_type_pkey;
+ALTER TABLE hazard_class ADD CONSTRAINT hazard_type_pkey
+    FOREIGN KEY (hazard_type) REFERENCES hazard_type (id);

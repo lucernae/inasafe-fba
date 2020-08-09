@@ -2,8 +2,10 @@ define([
     'backbone',
     'wellknown',
     'leaflet',
-    'moment'],
-    function (Backbone, Wellknown, L, moment) {
+    'moment',
+    'js/model/hazard_type.js',
+    'js/model/depth_class.js'],
+    function (Backbone, Wellknown, L, moment, HazardTypeCollection, DepthClassCollection) {
     /**
      * Attributes:
      *  - flood_map_id
@@ -35,18 +37,25 @@ define([
                     source: 'upload_source',
                     notes: 'notes',
                     link: 'link',
-                    trigger_status: 'trigger_status'
+                    trigger_status: 'trigger_status',
+                    hazard_type: 'hazard_type_id'
                 }
             },
             _constants: {
                 PRE_ACTIVATION_TRIGGER: 1,
                 ACTIVATION_TRIGGER: 2,
-                WMS_LAYER_NAME: `${layerNamespace}flood_forecast_layer`
+                WMS_LAYER_NAME: function (hazard_type) {
+                    return `${layerNamespace}${hazard_type}_forecast_layer`
+                }
             },
 
             urlRoot: _forecast_flood_url,
 
             initialize: function(){
+                this.hazard_type_collection = new HazardTypeCollection();
+                this.hazard_type_collection.fetch();
+                this.depth_class_collection = new DepthClassCollection();
+                this.depth_class_collection.fetch();
                 if(this.id) {
                     this.lead_time();
                     this.is_historical();
@@ -134,13 +143,18 @@ define([
                 return L.tileLayer.wms(
                     geoserverUrl,
                     {
-                        layers: this._constants.WMS_LAYER_NAME,
+                        layers: this._constants.WMS_LAYER_NAME(this.hazardTypeSlug()),
                         format: 'image/png',
                         transparent: true,
                         srs: 'EPSG:4326',
                         tiled: true,
                         filter: toXmlAndFilter({id: this.get('id')})
                     });
+            },
+
+            hazardTypeSlug: function () {
+                const hazard_type = this.hazard_type_collection.findWhere({ id: this.attributes.hazard_type_id });
+                return hazard_type.get('name').toLowerCase().replace(' ', '_');
             }
         },
         {
