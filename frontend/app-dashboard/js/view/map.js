@@ -66,7 +66,10 @@ define([
             this.listenTo(dispatcher, 'map:draw-geojson', this.drawGeojsonLayer);
             this.listenTo(dispatcher, 'map:remove-geojson', this.removeGeojsonLayer);
             this.map.fitWorld();
-            this.fetchBounds();
+            let that = this;
+            setTimeout(() =>{
+                that.fetchBounds();
+            }, 1000);
 
             // dispatcher registration
             dispatcher.on('map:draw-forecast-layer', this.drawForecastLayer, this);
