@@ -243,7 +243,9 @@ define([
             this.addReportingPoints();
 
             this.side_panel = new SidePanelView();
-            this.intro_view = new IntroView();
+            this.intro_view = new IntroView({
+                'skipIntro': true
+            });
         },
         polygonDrawn: function () {
             if (this.drawGroup && this.drawGroup.getLayers().length > 0) {
