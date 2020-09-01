@@ -22,15 +22,15 @@ from (SELECT
              village.village_code                     AS village_id,
              village.name                             AS village_name,
              row_number() over (partition by
-                 district.name, sub_district.name, village.name
+                 country.name, district.name, sub_district.name, village.name
                  order by village.village_code DESC ) as row_number
       FROM
            country
-               JOIN district ON
+               LEFT JOIN district ON
                    country.country_code = district.country_code::double precision
-               JOIN sub_district ON
+               LEFT JOIN sub_district ON
                    district.dc_code = sub_district.dc_code::double precision
-               JOIN village ON
+               LEFT JOIN village ON
                    village.sub_dc_code = sub_district.sub_dc_code::double precision
     ) a
 where a.row_number = 1
