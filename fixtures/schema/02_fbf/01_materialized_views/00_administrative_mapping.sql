@@ -3,13 +3,19 @@
 --
 DROP MATERIALIZED VIEW IF EXISTS public.mv_administrative_mapping cascade;
 CREATE MATERIALIZED VIEW public.mv_administrative_mapping AS
-select a.district_id,
+select
+       a.country_id,
+       a.country_name,
+       a.district_id,
        a.district_name,
        a.sub_district_id,
        a.sub_district_name,
        a.village_id,
        a.village_name
-from (SELECT district.dc_code                         AS district_id,
+from (SELECT
+             country.country_code                     AS country_id,
+             country.name                             AS country_name,
+             district.dc_code                         AS district_id,
              district.name                            AS district_name,
              sub_district.sub_dc_code                 AS sub_district_id,
              sub_district.name                        AS sub_district_name,
@@ -18,12 +24,15 @@ from (SELECT district.dc_code                         AS district_id,
              row_number() over (partition by
                  district.name, sub_district.name, village.name
                  order by village.village_code DESC ) as row_number
-      FROM ((public.district
-          JOIN public.sub_district ON ((district.dc_code =
-                                        (sub_district.dc_code)::double precision)))
-               JOIN public.village
-                    ON (((sub_district.sub_dc_code)::double precision =
-                         village.sub_dc_code)))) a
+      FROM
+           country
+               JOIN district ON
+                   country.country_code = district.country_code::double precision
+               JOIN sub_district ON
+                   district.dc_code = sub_district.dc_code::double precision
+               JOIN village ON
+                   village.sub_dc_code = sub_district.sub_dc_code::double precision
+    ) a
 where a.row_number = 1
     WITH NO DATA;
 

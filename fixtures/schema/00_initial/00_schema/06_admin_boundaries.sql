@@ -1,6 +1,13 @@
+CREATE TABLE IF NOT EXISTS public.country (
+    id integer NOT NULL,
+    geom public.geometry(MultiPolygon,4326),
+    country_code double precision primary key NOT NULL,
+    name character varying(254)
+);
 CREATE TABLE IF NOT EXISTS public.district (
     id integer NOT NULL,
     geom public.geometry(MultiPolygon,4326),
+    country_code double precision,
     prov_code double precision,
     dc_code double precision primary key NOT NULL,
     name character varying(254)
@@ -24,6 +31,7 @@ CREATE TABLE IF NOT EXISTS public.village (
     name character varying(254)
 );
 
+CREATE INDEX IF NOT EXISTS sidx_country_geom ON public.country USING gist (geom);
 CREATE INDEX IF NOT EXISTS sidx_sub_district_geom ON public.sub_district USING gist (geom);
 CREATE INDEX IF NOT EXISTS sidx_district_geom ON public.district USING gist (geom);
 CREATE INDEX IF NOT EXISTS sidx_village_geom ON public.village USING gist (geom);

@@ -7,13 +7,16 @@ define([
     'chartPluginLabel',
     'filesaver',
     'js/model/trigger_status.js',
+    'js/model/administrative_country_mapping.js',
     'js/view/panels/building-summary-panel.js',
     'js/view/panels/road-summary-panel.js',
     'js/view/panels/population-summary-panel.js',
-], function (Backbone, _, $, JqueryUi, Chart, ChartJsPlugin, fileSaver, TriggerStatusCollection,
-            BuildingSummaryPanel,
-            RoadSummaryPanel,
-            PopulationSummaryPanel
+], function (Backbone, _, $, JqueryUi, Chart, ChartJsPlugin, fileSaver,
+             TriggerStatusCollection,
+             AdministrativeCountryMappingCollection,
+             BuildingSummaryPanel,
+             RoadSummaryPanel,
+             PopulationSummaryPanel
 ) {
     return Backbone.View.extend({
         template: _.template($('#dashboard-template').html()),
@@ -96,7 +99,7 @@ define([
                 callback();
             }
         },
-        renderRegionSummary: function (overall, data, main_panel, sub_region, id_field, exposure_name, hazard_type) {
+        renderRegionSummary: async function (overall, data, main_panel, sub_region, id_field, exposure_name, hazard_type) {
             // main panel title (the region)
             let that = this;
             let id_key = {
@@ -168,6 +171,11 @@ define([
                         }
                     });
                 }
+                // Figure out country names from region ids
+                let ids = pivot_data.map(item => item[id_field]);
+                let country_mapping_collection = new AdministrativeCountryMappingCollection(sub_region);
+                await country_mapping_collection.findByIds(ids);
+
                 // We use population data as pivot because it always represents intersected admin boundaries
                 // If guarantees that this is a set of intersected admin boundaries with hazard
                 for(let u=0; u<pivot_data.length; u++){
@@ -176,9 +184,14 @@ define([
                         continue
                     }
                     let trigger_status = item.trigger_status || 0;
+                    let country_mapping = country_mapping_collection.findWhere({
+                        [`${sub_region}_id`]: item[id_field]
+                    });
+                    let country_name = country_mapping?.attributes.country_name;
                     $table.append(item_template({
                         region: sub_region,
                         id: item[id_field],
+                        country_name: country_name,
                         name: item['name'],
                         loading_template: that.loading_template,
                         flooded_road_count: that.loading_template,
