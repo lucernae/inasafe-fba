@@ -172,7 +172,7 @@ define([
                     });
                 }
                 // Figure out country names from region ids
-                let ids = pivot_data.map(item => item[id_field]);
+                let ids = pivot_data.filter(item => item !== undefined).map(item => item[id_field]);
                 let country_mapping_collection = new AdministrativeCountryMappingCollection(sub_region);
                 await country_mapping_collection.findByIds(ids);
 
@@ -394,14 +394,17 @@ define([
                 dispatcher.trigger('map:fit-forecast-layer-bounds', floodCollectionView.selected_forecast)
             }
 
-            $.get({
-                url: postgresUrl + `vw_${region}_extent?id_code=eq.${region_id}`,
-                success: function (data) {
-                    if(data.length > 0) {
-                        let coordinates = [[data[0].y_min, data[0].x_min], [data[0].y_max, data[0].x_max]];
-                        dispatcher.trigger('map:fit-bounds', coordinates)
+            if(region_id !== 'main') {
+                $.get({
+                    url: postgresUrl + `vw_${region}_extent?id_code=eq.${region_id}`,
+                    success: function (data) {
+                        if (data.length > 0) {
+                            let coordinates = [[data[0].y_min, data[0].x_min], [data[0].y_max, data[0].x_max]];
+                            dispatcher.trigger('map:fit-bounds', coordinates)
+                        }
                     }
-            }});
+                });
+            }
         },
         switchTab: function (e) {
             let $div = $(e.target).closest('.tab-title');
