@@ -12,7 +12,7 @@ define([
             'click .prev-intro': 'prevClicked',
             'click .close-intro': 'hide',
         },
-        initialize: function () {
+        initialize: function (options) {
             let self = this;
             this.currentIntroIndex = 1;
             this.introContent = this.$el.find('.intro-content');
@@ -29,6 +29,9 @@ define([
                 self.resetIntro()
             });
             this.loadIntro();
+            if(options.skipIntro){
+                this.skipIntro();
+            }
         },
         loadIntro: function () {
             const self = this;
@@ -69,6 +72,13 @@ define([
         prevClicked: function () {
             this.currentIntroIndex -= 1;
             this.loadIntro();
+        },
+        skipIntro: function (){
+            let that = this;
+            this.$el.hide(200, function (){
+                that.introOpen = false;
+                dispatcher.trigger('map:show-map');
+            });
         },
         hide: function () {
             if (this.introOpen) {

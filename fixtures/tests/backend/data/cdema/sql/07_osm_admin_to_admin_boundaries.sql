@@ -1,3 +1,6 @@
+--- Country is equal to admin level 2
+insert into country (id, geom, country_code, name)
+(select id, st_multi(geometry), id, name from osm_admin where admin_level = 2) on conflict DO NOTHING ;
 
 --- District is equal to admin level 6
 insert into district (id, geom, dc_code, name)

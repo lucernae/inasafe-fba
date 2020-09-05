@@ -66,7 +66,10 @@ define([
             this.listenTo(dispatcher, 'map:draw-geojson', this.drawGeojsonLayer);
             this.listenTo(dispatcher, 'map:remove-geojson', this.removeGeojsonLayer);
             this.map.fitWorld();
-            this.fetchBounds();
+            let that = this;
+            setTimeout(() =>{
+                that.fetchBounds();
+            }, 1000);
 
             // dispatcher registration
             dispatcher.on('map:draw-forecast-layer', this.drawForecastLayer, this);
@@ -243,7 +246,9 @@ define([
             this.addReportingPoints();
 
             this.side_panel = new SidePanelView();
-            this.intro_view = new IntroView();
+            this.intro_view = new IntroView({
+                'skipIntro': true
+            });
         },
         polygonDrawn: function () {
             if (this.drawGroup && this.drawGroup.getLayers().length > 0) {
