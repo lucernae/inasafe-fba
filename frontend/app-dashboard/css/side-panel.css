@@ -470,3 +470,13 @@ form label {
 .panel-body {
     padding: 30px !important;
 }
+
+.box-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-content-value {
+    margin-top: -5px;
+}

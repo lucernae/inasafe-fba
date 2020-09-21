@@ -454,13 +454,17 @@
         </div>
         <div class="tab-wrapper tab-building">
             <div class="col-lg-12">
-                <div class="col-lg-5 box-vulnerability">
-                    <div class="vulnerability-score">-</div>
-                    <div class="subtext">Vulnerability Score Total</div>
+                <div class="col-lg-5 box-vulnerability box-wrapper">
+                    <div class="box-content">
+                        <div class="vulnerability-score box-content-value">-</div>
+                        <div class="subtext">Vulnerability Score Total</div>
+                    </div>
                 </div>
-                <div class="col-lg-5 box-exposed">
-                    <div class="exposed-count">-</div>
-                    <div class="subtext">Potentially affected buildings</div>
+                <div class="col-lg-5 box-exposed box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-count box-content-value">-</div>
+                        <div class="subtext">Potentially affected buildings</div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 panel-chart-primary" style="min-height: 250px">
@@ -472,13 +476,17 @@
         </div>
         <div class="tab-wrapper tab-road" style="display: none">
             <div class="col-lg-12">
-                <div class="col-lg-5 box-vulnerability">
-                    <div class="vulnerability-score">-</div>
-                    <div class="subtext">Vulnerability Score Total</div>
+                <div class="col-lg-5 box-vulnerability box-wrapper">
+                    <div class="box-content">
+                        <div class="vulnerability-score box-content-value">-</div>
+                        <div class="subtext">Vulnerability Score Total</div>
+                    </div>
                 </div>
-                <div class="col-lg-5 box-exposed">
-                    <div class="exposed-count">-</div>
-                    <div class="subtext">Potentially affected roads</div>
+                <div class="col-lg-5 box-exposed box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-count box-content-value">-</div>
+                        <div class="subtext">Potentially affected roads</div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 panel-chart-primary" style="min-height: 250px">
@@ -490,15 +498,19 @@
         </div>
         <div class="tab-wrapper tab-population" style="display: none">
             <div class="col-lg-12">
-                <div class="col-lg-5 box-summary-count">
-                    <div class="exposed-census-count summary-count">-</div>
-                    <div class="subtext">Population in affected admin boundaries</div>
-                    <div class="subtext">(Census data)</div>
+                <div class="col-lg-5 box-summary-count box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-census-count summary-count box-content-value">-</div>
+                        <div class="subtext">Population in affected admin boundaries</div>
+                        <div class="subtext">(Census data)</div>
+                    </div>
                 </div>
-                <div class="col-lg-5 box-exposed">
-                    <div class="exposed-count">-</div>
-                    <div class="subtext">Potentially affected population</div>
-                    <div class="subtext">(World Population stats)</div>
+                <div class="col-lg-5 box-exposed box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-count box-content-value">-</div>
+                        <div class="subtext">Potentially affected population</div>
+                        <div class="subtext">(World Population stats)</div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 panel-chart-primary" style="min-height: 250px">
@@ -529,21 +541,27 @@
     </tr>
     <tr data-region-id="<%= id %>">
         <td class="box-count-left">
-            <div class="box-count">
-                <div class="score building"><%= flooded_building_count %></div>
-                <div class="subtext">Potentially affected buildings</div>
+            <div class="box-count box-wrapper">
+                <div class="box-content">
+                    <div class="score building box-content-value"><%= flooded_building_count %></div>
+                    <div class="subtext">Potentially affected buildings</div>
+                </div>
             </div>
         </td>
         <td class="box-count-middle">
-            <div class="box-count">
-                <div class="score road"><%= flooded_road_count %></div>
-                <div class="subtext">Potentially affected roads</div>
+            <div class="box-count box-wrapper">
+                <div class="box-content">
+                    <div class="score road box-content-value"><%= flooded_road_count %></div>
+                    <div class="subtext">Potentially affected roads</div>
+                </div>
             </div>
         </td>
         <td class="box-count-right">
-            <div class="box-count">
-                <div class="score population"><%= flooded_population_count %></div>
-                <div class="subtext">Potentially affected population (World Population stats)</div>
+            <div class="box-count box-wrapper">
+                <div class="box-content">
+                    <div class="score population box-content-value"><%= flooded_population_count %></div>
+                    <div class="subtext">Potentially affected population (World Population stats)</div>
+                </div>
             </div>
         </td>
     </tr>
