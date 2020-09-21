@@ -223,7 +223,7 @@ define([
                 let exposed_count = item[`flooded_${exposure_name}_count`];
                 let total_score = exposed_count ? exposed_count : '-';
                 let $el = $wrapper.find(`[data-region-id=${item[id_field]}] .score.${exposure_name}`);
-                $el.html(total_score);
+                $el.html(parseFloat(total_score).numberWithCommas());
             }
             // set count to 0 for every row that was not updated.
             $wrapper.find(`.score.${exposure_name} i.fa`).parent().map((idx, $el) => $($el).html(0));

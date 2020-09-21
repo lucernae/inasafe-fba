@@ -256,12 +256,12 @@ form label {
 
 .panel-title {
     font-weight: normal !important;
+    padding-top: 10px;
 }
 
 #panel-dashboard .panel-title {
     font-weight: normal !important;
     font-size: 11pt;
-    padding-top: 10px;
 }
 
 .box-vulnerability, .box-summary-count, .box-exposed {
@@ -328,9 +328,6 @@ form label {
 
 .browse-header {
     background-color: #6AA47A;
-    margin-top: -15px;
-    margin-left: -15px;
-    margin-right: -15px;
     padding: 5px 15px;
     margin-bottom: 15px;
 }
@@ -404,10 +401,7 @@ form label {
 }
 
 .flood-count {
-    border: 1px solid black;
     padding: 13px;
-    margin-bottom: 3px;
-    border-radius: 6px;
     font-size: 16px;
     font-weight: 600;
 }
@@ -466,4 +460,13 @@ form label {
     text-align: left;
     border: 1px solid #ddd;
     padding: 3px;
+}
+
+.flood-summary-number {
+    font-size: 1.5em;
+    padding-right: 5px;
+}
+
+.panel-body {
+    padding: 30px !important;
 }

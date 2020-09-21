@@ -288,8 +288,9 @@ define([
                 let $element = $('#flood-summary-trigger-status-' + key);
                 if ($element.length !== 0) {
                     $element.closest('.flood-count').show();
-                    $element.html(value);
+                    $element.html(parseFloat(value).numberWithCommas());
                 }
+                $element.addClass('flood-summary-number');
             });
         },
         updateForecastsList: function (forecasts) {
