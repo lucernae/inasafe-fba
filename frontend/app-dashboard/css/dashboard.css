@@ -28,7 +28,6 @@ body {
 
 .flex-item {
     height: 100%;
-    padding-top: 62px
 }
 
 .flex-item:nth-child(1) {

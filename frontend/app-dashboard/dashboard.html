@@ -32,7 +32,7 @@
 <div class="flex-item" style="position: relative; overflow: hidden; z-index: 10000">
     <div id="side-panel">
         <div class="panel-group" id="accordion">
-            <div class="panel-body-wrapper panel-body panel-welcome">
+            <div class="panel-body-wrapper panel-welcome">
                 <div class="panel-title">
                     Welcome to FBA
                 </div>
@@ -42,13 +42,9 @@
                             <span id="flood-summary-trigger-status-all"><i class="fa fa-spinner fa-spin fa-fw"></i></span> Hazard expected in the next 10 days</div>
                     </div>
                     <br>
-					<p>Welcome to the InaSAFE Forecast Based Action dashboard.
-					This site is our first prototype of a flood impact based
-					forecast dashboard to trigger Early Action.</p>
 
-					<p>To get started, use the green flood selector icon below to
-					select a historical or forecast flood event (valid
-					dates have circles around them).</p>
+					<p>To get started, use the green hazard selector icon below to select a hazard event
+                        (valid dates have circles around them).</p>
 
 					<p>This site is developed in collaboration with the
 					<a href="https://www.climatecentre.org">Red
@@ -64,22 +60,18 @@
                         <div class="col-lg-10 text-justify">
                             <span>
 								Click the download button on the top right of
-								the flood forecast summary to download the flood
+								the hazard forecast summary to download the hazard
 								impact forecast report.
                             </span>
                         </div>
                     </div>
-                    <div class="row Infographics">
-                        <div class="col-lg-2 landing-page-icon">
-                            <img src="images/add-flood.svg">
-                        </div>
-                        <div class="col-lg-10 text-justify">
-                            <span>
-								Click the Add Flood button on the right side of
-								the navigation bar to add your flood forecast layer.
-                            </span>
-                        </div>
-                    </div>
+<!--                    <div class="row Infographics">-->
+<!--                        <div class="col-lg-2 landing-page-icon">-->
+<!--                            <img src="images/add-flood.svg">-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-10 text-justify">-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="row Infographics">
                         <div class="col-lg-2 landing-page-icon">
                             <img src="images/browse-icon.svg">
@@ -93,19 +85,19 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body-wrapper panel-body panel-flood-scenario" style="display: none">
-                <button class="btn btn-back pull-left"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></button>
-                <div class="panel-title">
-                    Add Hazard Forecast
+                <div class="panel-body-wrapper panel-body panel-flood-scenario" style="display: none">
+                    <button class="btn btn-back pull-left"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></button>
+                    <div class="panel-title">
+                        Add Hazard Forecast
+                    </div>
+                    <div class="panel-body">
+                        <button class="btn btn-warning btn-primary-1 btn-full-width" id="draw-flood" style="display: none;">Draw Flood Forecast</button>
+                        <button class="btn btn-warning btn-primary-1 btn-full-width" id="upload-flood">Upload Hazard Forecast</button>
+                        <button class="btn btn-warning btn-primary-1 btn-full-width" id="glofas" disabled>Latest GloFAS Forecast</button>
+                        <button class="btn btn-warning btn-primary-1 btn-full-width" id="signature-flood" disabled>Latest Signature Flood Event</button>
+                        <button class="btn btn-warning btn-primary-1 btn-full-width" id="existing-scenario-flood" disabled>Use Existing Scenario</button>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <button class="btn btn-warning btn-primary-1 btn-full-width" id="draw-flood" style="display: none;">Draw Flood Forecast</button>
-                    <button class="btn btn-warning btn-primary-1 btn-full-width" id="upload-flood">Upload Hazard Forecast</button>
-                    <button class="btn btn-warning btn-primary-1 btn-full-width" id="glofas" disabled>Latest GloFAS Forecast</button>
-                    <button class="btn btn-warning btn-primary-1 btn-full-width" id="signature-flood" disabled>Latest Signature Flood Event</button>
-                    <button class="btn btn-warning btn-primary-1 btn-full-width" id="existing-scenario-flood" disabled>Use Existing Scenario</button>
-                </div>
-            </div>
             <div class="panel-body-wrapper panel-body panel-flood-form" style="display: none">
                 <div class="form-wrapper panel-draw-flood flood-form panel-body-subwrapper" style="display: none">
                     <button class="btn btn-back pull-left" id="cancel-draw"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></button>
@@ -144,7 +136,7 @@
                                         <input class="form-control datepicker-here" data-language="en" data-timepicker="true" data-position="left bottom" type="text" name="acquisition_date" id="draw_acquisition_date" style="font-size: 10px;" autocomplete="off">
                                     </div>
                                     <div class="col-lg-6" style="padding-left: 5px">
-                                        <label for="draw_forecast_date">Forecast date </label>
+                                        <label for="draw_forecast_date">Event date </label>
                                         <input class="form-control datepicker-here" data-language="en" data-timepicker="true" data-position="left bottom" type="text" name="forecast_date" id="draw_forecast_date" style="font-size: 10px;" autocomplete="off">
                                     </div>
                                 </div>
@@ -190,7 +182,7 @@
                                         <input class="form-control datepicker-here" data-date-format="yyyy-mm-dd" data-time-format="hh:ii" data-language="en" data-timepicker="true" data-position="left bottom" type="text" name="acquisition_date" id="upload_acquisition_date" style="font-size: 10px;" autocomplete="off">
                                     </div>
                                     <div class="col-lg-6" style="padding-left: 5px">
-                                        <label for="upload_forecast_date">Forecast date </label>
+                                        <label for="upload_forecast_date">Event date </label>
                                         <input class="form-control datepicker-here" data-date-format="yyyy-mm-dd" data-time-format="hh:ii" data-language="en" data-timepicker="true" data-position="left bottom" type="text" name="forecast_date" id="upload_forecast_date" style="font-size: 10px;" autocomplete="off">
                                     </div>
                                 </div>
@@ -207,7 +199,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body panel-browse-flood" style="display: none">
+            <div class="panel-browse-flood" style="display: none">
                 <div class="panel-body-wrapper floating-panel">
                     <div class="panel-body-subwrapper panel-browse-by-forecast">
                         <div class="panel-header browse-header">
@@ -349,18 +341,18 @@
     </div>
 </div>
 
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="row">
-        <div class="col-lg-4 navbar-logo">
-            <div class="home-fbf" style="font-weight: 900; color: white !important;">
-                <img src="images/fbf-inasafe.svg" height="40">
-            </div>
-        </div>
-        <div class="col-lg-4 pull-right" style="text-align: right; padding-right: 35px; padding-top: 7px">
-            <button class="btn btn-warning btn-primary-1 add-flood-scenario"><img src="images/add-flood-icon.svg"><span>ADD HAZARD FORECAST</span></button>
-        </div>
-    </div>
-</nav>
+<!--<nav class="navbar navbar-default navbar-fixed-top" role="navigation">-->
+<!--    <div class="row">-->
+<!--        <div class="col-lg-4 navbar-logo">-->
+<!--            <div class="home-fbf" style="font-weight: 900; color: white !important;">-->
+<!--                <img src="images/fbf-inasafe.svg" height="40">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-lg-4 pull-right" style="text-align: right; padding-right: 35px; padding-top: 7px">-->
+<!--            <button class="btn btn-warning btn-primary-1 add-flood-scenario"><img src="images/add-flood-icon.svg"><span>ADD HAZARD FORECAST</span></button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
 
 <!-- Modal content-->
 <div class="modal" id="fbf-modal" tabindex="-1" role="dialog">
@@ -400,7 +392,7 @@
         <table>
             <tr>
                 <td>
-                    Forecast Date
+                    Event Date
                 </td>
                 <td>
                     <%= forecast_date %>
@@ -462,13 +454,17 @@
         </div>
         <div class="tab-wrapper tab-building">
             <div class="col-lg-12">
-                <div class="col-lg-5 box-vulnerability">
-                    <div class="vulnerability-score">-</div>
-                    <div class="subtext">Vulnerability Score Total</div>
+                <div class="col-lg-5 box-vulnerability box-wrapper">
+                    <div class="box-content">
+                        <div class="vulnerability-score box-content-value">-</div>
+                        <div class="subtext">Vulnerability Score Total</div>
+                    </div>
                 </div>
-                <div class="col-lg-5 box-exposed">
-                    <div class="exposed-count">-</div>
-                    <div class="subtext">Potentially affected buildings</div>
+                <div class="col-lg-5 box-exposed box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-count box-content-value">-</div>
+                        <div class="subtext">Potentially affected buildings</div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 panel-chart-primary" style="min-height: 250px">
@@ -480,13 +476,17 @@
         </div>
         <div class="tab-wrapper tab-road" style="display: none">
             <div class="col-lg-12">
-                <div class="col-lg-5 box-vulnerability">
-                    <div class="vulnerability-score">-</div>
-                    <div class="subtext">Vulnerability Score Total</div>
+                <div class="col-lg-5 box-vulnerability box-wrapper">
+                    <div class="box-content">
+                        <div class="vulnerability-score box-content-value">-</div>
+                        <div class="subtext">Vulnerability Score Total</div>
+                    </div>
                 </div>
-                <div class="col-lg-5 box-exposed">
-                    <div class="exposed-count">-</div>
-                    <div class="subtext">Potentially affected roads</div>
+                <div class="col-lg-5 box-exposed box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-count box-content-value">-</div>
+                        <div class="subtext">Potentially affected roads</div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 panel-chart-primary" style="min-height: 250px">
@@ -498,15 +498,19 @@
         </div>
         <div class="tab-wrapper tab-population" style="display: none">
             <div class="col-lg-12">
-                <div class="col-lg-5 box-summary-count">
-                    <div class="exposed-census-count summary-count">-</div>
-                    <div class="subtext">Population in affected admin boundaries</div>
-                    <div class="subtext">(Census data)</div>
+                <div class="col-lg-5 box-summary-count box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-census-count summary-count box-content-value">-</div>
+                        <div class="subtext">Population in affected admin boundaries</div>
+                        <div class="subtext">(Census data)</div>
+                    </div>
                 </div>
-                <div class="col-lg-5 box-exposed">
-                    <div class="exposed-count">-</div>
-                    <div class="subtext">Potentially affected population</div>
-                    <div class="subtext">(World Population stats)</div>
+                <div class="col-lg-5 box-exposed box-wrapper">
+                    <div class="box-content">
+                        <div class="exposed-count box-content-value">-</div>
+                        <div class="subtext">Potentially affected population</div>
+                        <div class="subtext">(World Population stats)</div>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-12 panel-chart-primary" style="min-height: 250px">
@@ -537,21 +541,27 @@
     </tr>
     <tr data-region-id="<%= id %>">
         <td class="box-count-left">
-            <div class="box-count">
-                <div class="score building"><%= flooded_building_count %></div>
-                <div class="subtext">Potentially affected buildings</div>
+            <div class="box-count box-wrapper">
+                <div class="box-content">
+                    <div class="score building box-content-value"><%= flooded_building_count %></div>
+                    <div class="subtext">Potentially affected buildings</div>
+                </div>
             </div>
         </td>
         <td class="box-count-middle">
-            <div class="box-count">
-                <div class="score road"><%= flooded_road_count %></div>
-                <div class="subtext">Potentially affected roads</div>
+            <div class="box-count box-wrapper">
+                <div class="box-content">
+                    <div class="score road box-content-value"><%= flooded_road_count %></div>
+                    <div class="subtext">Potentially affected roads</div>
+                </div>
             </div>
         </td>
         <td class="box-count-right">
-            <div class="box-count">
-                <div class="score population"><%= flooded_population_count %></div>
-                <div class="subtext">Potentially affected population (World Population stats)</div>
+            <div class="box-count box-wrapper">
+                <div class="box-content">
+                    <div class="score population box-content-value"><%= flooded_population_count %></div>
+                    <div class="subtext">Potentially affected population (World Population stats)</div>
+                </div>
             </div>
         </td>
     </tr>

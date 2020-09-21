@@ -32,4 +32,8 @@ define([
         moment.prototype.toJavascriptDate = function () {
             return new Date(...(this.toArray()));
         }
+
+        Number.prototype.numberWithCommas = function () {
+            return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     })
