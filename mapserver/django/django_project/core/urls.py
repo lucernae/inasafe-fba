@@ -6,12 +6,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include
 
+
 admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('mapserver.urls')),
-
+    url(r'', include('fba.urls')),
+    url(r'^api-auth/', include('rest_framework.urls'))
 ]
 
 if settings.DEBUG:
