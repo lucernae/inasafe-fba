@@ -58,7 +58,7 @@ class ConeDivider:
     # Split the cone to multiple cones
     # put the point properties into their respective cones
     # then return the divided cones as geojson
-    def get_cones(self) -> dict:
+    def split_cones(self) -> dict:
 
         try:
             # Convert to shapely object
