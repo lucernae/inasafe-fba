@@ -1,4 +1,3 @@
-import requests
 import random
 import hashlib
 import psycopg2 as driv
@@ -6,10 +5,7 @@ import psycopg2 as driv
 from postgis.psycopg import register
 
 from django.core.management.base import BaseCommand
-from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
-from django.db.models import Q
-from fba.models.hazard_event import HazardEvent
-from fba.models.hazard_event_queue import HazardEventQueue
+from django.contrib.gis.geos import GEOSGeometry
 from fba.models.all import District
 
 
