@@ -128,11 +128,12 @@ define([
                 })
                 .always(function () {
                     that.fetchForecastCollection();
+                    that.fetchRecentForecastEvents();
 
                     // fetch historical forecast to 2 months back
-                    let today = moment();
-                    previous_months = today.clone().subtract(2, 'months');
-                    that.fetchHistoricalForecastCollection(previous_months, today);
+                    // let today = moment();
+                    // previous_months = today.clone().subtract(2, 'months');
+                    // that.fetchHistoricalForecastCollection(previous_months, today);
                 });
         },
         initializeDatePickerBrowse: function (predefined_event) {
@@ -204,6 +205,13 @@ define([
                 // try next update
                 setInterval(this.updateDatePicker, 500);
             }
+        },
+        fetchRecentForecastEvents: function () {
+            ForecastEvent.getRecentForecastList().then(
+                data => {
+                    console.log(data);
+                }
+            )
         },
         fetchHistoricalForecastCollection: function(forecast_date_range_start, forecast_date_range_end){
             const today = moment().momentDateOnly().utc();

@@ -1,0 +1,117 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 7
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -2.35107421875,
+          2.064982495867117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 6
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -5.09765625,
+          1.9332268264771233
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -7.250976562499999,
+          2.5040852618529215
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -9.68994140625,
+          3.6888551431470478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -11.689453125,
+          4.981505049328246
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -13.4912109375,
+          6.271618064314864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "marker-color": "#7e7e7e",
+        "marker-size": "medium",
+        "marker-symbol": "",
+        "ogc_fid": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -15.18310546875,
+          8.015715997869071
+        ]
+      }
+    }
+  ]
+}

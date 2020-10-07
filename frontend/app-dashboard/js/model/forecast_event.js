@@ -22,6 +22,7 @@ define([
     const _flood_event_historical_forecast_list_f_url = postgresUrl + 'rpc/flood_event_historical_forecast_list_f';
     // We define which column to take because we don't want to fetch the whole spreadsheet blob.
     const _select_query_param = 'select=id,flood_map_id,acquisition_date,forecast_date,source,notes,link,trigger_status,hazard_type_id';
+    const _recent_forecast_list = djangoUrl + '/recent-hazard-events/';
     const ForecastEvent = Backbone.Model.extend({
             // attribute placeholder
             _url: {
@@ -315,6 +316,19 @@ define([
                         })
                         .catch(reject);
                 });
+            },
+            /**
+             * Return a list of recent hazard event
+             * @returns {Promise<any>}
+             */
+            getRecentForecastList: function () {
+                return new Promise( (resolve, reject) => {
+                    AppRequest.get(
+                        _recent_forecast_list
+                    ).done(function (data) {
+                        resolve(data)
+                    }).catch(reject)
+                })
             }
         });
     return ForecastEvent;

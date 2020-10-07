@@ -6,3 +6,4 @@ djangorestframework-gis==0.14
 psycopg2-binary==2.8.3
 Pillow
 requests
+Shapely==1.7.1

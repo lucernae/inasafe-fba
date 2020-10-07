@@ -20,3 +20,9 @@ class HazardEvent(base_model):
     class Meta:
         managed = False
         db_table = 'hazard_event'
+
+    def __str__(self):
+        return '{source} - {date}'.format(
+            source=self.source,
+            date=self.acquisition_date
+        )
