@@ -85,6 +85,18 @@ class Config(base_model):
         db_table = 'config'
 
 
+class AdminBoundaryGlobalKeyMapping(base_model):
+    id = models.BigAutoField(primary_key=True)
+    id_mapping = models.BigIntegerField()
+    key = models.CharField(max_length=255)
+    partition = models.CharField(max_length=255)
+    partition_level = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'admin_boundary_global_key_mapping'
+
+
 class Country(base_model):
     id = models.IntegerField()
     geom = models.MultiPolygonField(blank=True, null=True)
@@ -354,7 +366,7 @@ class SubDistrict(base_model):
     prov_code = models.SmallIntegerField(blank=True, null=True)
     dc_code = models.SmallIntegerField(blank=True, null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
-    sub_dc_code = models.DecimalField(primary_key=True, max_digits=65535, decimal_places=65535)
+    sub_dc_code = models.FloatField(primary_key=True)
 
     class Meta:
         managed = False

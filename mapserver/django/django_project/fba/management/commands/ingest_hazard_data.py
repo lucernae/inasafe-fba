@@ -38,7 +38,7 @@ class Command(BaseCommand):
 
         # Hazard type
         hazard_type, _ = HazardType.objects.get_or_create(
-            name='Hurricane'
+            name='Hurricane - NOAA'
         )
 
         unique_storm_ids = []
@@ -48,7 +48,6 @@ class Command(BaseCommand):
             properties = feature['properties']
             if properties['ncstormid'] not in unique_storm_ids:
                 unique_storm_ids.append(properties['ncstormid'])
-
 
         print('Fetch latest storms')
         # Get the latest hazard event from storm_id
@@ -99,11 +98,11 @@ class Command(BaseCommand):
 
                 if not hazard_classes.exists():
                     all_hazard_class = HazardClass.objects.all()
-                    hazard_class_last_id = all_hazard_class[all_hazard_class.count() - 1].id + 1
+                    hazard_class_last_id = all_hazard_class[-1].id + 1
                     hazard_class, _ = HazardClass.objects.get_or_create(
                         label=storm_type,
                         hazard_type=hazard_type,
-                        id = hazard_class_last_id
+                        id=hazard_class_last_id
                     )
                 else:
                     hazard_class = hazard_classes[0]
