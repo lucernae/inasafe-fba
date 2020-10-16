@@ -3,7 +3,8 @@
 from .prod import *  # noqa
 import os
 
-DEBUG = False
+DEBUG = ast.literal_eval(
+    os.environ.get('DEBUG', 'False'))
 
 ALLOWED_HOSTS = ['*']
 

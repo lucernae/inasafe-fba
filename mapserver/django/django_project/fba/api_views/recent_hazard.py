@@ -1,4 +1,5 @@
 # coding=utf-8
+from rest_framework import serializers
 from rest_framework.views import APIView, Response
 from fba.models.all import HazardEvent
 from fba.serializers.hazard_event import HazardEventSerializer
@@ -9,7 +10,7 @@ class RecentHazardList(APIView):
 
     def get(self, request):
         hazard_events = HazardEvent.objects.all().order_by(
-            '-acquisition_date'
+            '-forecast_date', '-acquisition_date'
         )[:5]
         hazard_event_serializer = HazardEventSerializer(
             hazard_events,
